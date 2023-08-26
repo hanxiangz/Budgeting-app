@@ -15,7 +15,7 @@ def get_all_list():
     expenses = database.get_all_list()
     for expense in expenses:
         expense['_id'] = str(expense['_id'])
-    return jsonify(expenses) 
+    return jsonify(expenses)
 
 #to add a expenditure to the database
 
