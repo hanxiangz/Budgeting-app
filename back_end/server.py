@@ -7,7 +7,8 @@ from bson.objectid import ObjectId
 
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "methods": ["GET", "POST", "DELETE"]}})
 
 
 """ @app.route("/")
@@ -56,11 +57,14 @@ def delete_spending_route(item_id):
     except Exception as e:
         return jsonify({"message": f"Error: {str(e)}"}), 500
 
- #to call and display the different categories
+ #to call and display the different categories in a dropdown menu
 
+@app.route('/categories', methods=['GET'])
+def get_categories():
+    categories = ["Eat_Out", "Utilities", "Groceries", "Departmental", "Miscellaneous"]
+    return jsonify(categories)
 
-
- #
+ 
 
 if __name__ == "__main__":
     app.run(debug=True)
