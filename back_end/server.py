@@ -7,6 +7,9 @@ app = Flask(__name__)
 def flask_hello():
     return "Hello World!"
 
+@app.route("/add")
+def addTransaction():
+    return {"users": ["user", "user", "user3"]} ## just testing
 
 #to retrieve all the spending from the database
 
