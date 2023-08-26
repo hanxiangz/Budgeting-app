@@ -1,6 +1,7 @@
 from pymongo import MongoClient
+import datetime
 
-uri = "mongodb+srv://hello:there@cluster0.79ymkqj.mongodb.net/"  # Replace with the MongoDB cluster URI
+uri = "mongodb+srv://hello:there@cluster0.79ymkqj.mongodb.net/?retryWrites=true&w=majority"  # Replace with the MongoDB cluster URI
 
 client = MongoClient(uri)
 
@@ -45,6 +46,14 @@ def get_all_misc():
     Misc = db['Miscellaneous']
     return list(Misc.find({}))  
 
+def add_spending(data):
+    result = expenses.insert_one(data)
+    if result.inserted_id:
+        return {"message": "Data added successfully!", "id": str(result.inserted_id)}
+    else:
+        return {"message": "Failed to add data."}
 
-
-
+#Remove a single item by its _id from the MongoDB collections(testing)
+def remove_item_by_id(item_id):
+    result = expenses.delete_one({"_id": item_id})
+    return result.deleted_count  # returns the number of documents deleted (0 or 1)
