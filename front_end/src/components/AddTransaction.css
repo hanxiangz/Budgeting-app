@@ -1,0 +1,42 @@
+.centered {
+  text-align: center;
+}
+
+.line {
+  width: 100%;
+  height: 1px; /* Adjust the line's thickness */
+  background-color: #000; /* Adjust the line's color as needed */
+  margin-top: 10px; /* Add spacing between the title and the line */
+  margin-bottom: 40px; /* Add spacing beneath the line */
+}
+
+.container-form {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  /* min-height: 100vh; */
+  text-align: right;
+}
+
+.form-group {
+  margin-bottom: 50px; /* Add spacing between form groups */
+}
+
+input {
+  padding: 0;
+  margin: 0; 
+  outline: none; /* Remove the default focus outline if needed */
+  line-height: normal; /* Reset line height to normal */
+  vertical-align: top;
+  box-sizing: border-box;
+  background-color: rgba(208, 212, 216, 0.689);
+}
+
+.submit-button {
+  background-color: #bd0d0d; 
+  color: white; 
+  width: 100px;
+  height: 40px;
+  font-size: 25px;
+  line-height: 0px; /* Adjust line height to vertically center text */
+}

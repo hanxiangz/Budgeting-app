@@ -1,9 +1,23 @@
 import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    PointElement
+} from 'chart.js';
+
+ChartJS.register(
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    PointElement
+)
 
 const HomePage = () => {
-
   const headingStyle = {
     textAlign: 'center'
   };
@@ -16,21 +30,54 @@ const HomePage = () => {
   };
 
   const [redirectToNewPage, setRedirectToNewPage] = useState(false);
+  const [redirectRoute, setRedirectRoute] = useState(null);
 
-  const handleRedirect = () => {
+  const handleRedirect = (url) => {
     setRedirectToNewPage(true);
+    setRedirectRoute(url);
   };
 
-  if (redirectToNewPage) {
-    return <Navigate to="/add" />;
+  if (redirectToNewPage && redirectRoute != null) {
+    return <Navigate to= {`${redirectRoute}`} />;
   }
+
+  const data = {
+    labels: ['January', 'February', 'March', 'April', 'May'],
+    datasets: [{
+        data: [1000, 1500, 1200, 1800, 1000],
+        backgroundColor: 'transparent',
+        borderColor: '#f26c6d',
+        pointBorderColor: 'transparent',
+        pointBorderWidth: 4,
+        tension: 0.5
+    }]
+  };
+  const options = {
+    plugins: {
+        legend: false
+    },
+    scales: {
+        x: {
+            grid: {
+                display: false
+            }
+        },
+        y: {
+            min: 0,
+            max: 2500,
+            ticks: {
+                stepSize: 500,
+                callback: (value) => value 
+            },
+            grid: {
+                borderDash: [10]
+            }
+        }
+    }
+  };
 
   return (
     <div>
-      {/* <h1>This is the home page!</h1>
-      <li>
-        <Link to="/add">Add a transaction</Link>
-      </li> */}
 
       <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
@@ -55,6 +102,9 @@ const HomePage = () => {
         </div>
         <div class="col-sm-8 bg-secondary p-4 my-4 border">
           <h3>Net Savings for the Year</h3>
+          <div style = {{width: '500px', height: '220px', marginLeft: '20px'}}>
+            <Line data = {data} options={options}></Line>
+          </div>
         </div>
       </div>
 
@@ -63,18 +113,18 @@ const HomePage = () => {
         <br/>
         <div class="d-flex justify-content-center">
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-secondary btn-lg">Food</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg">Bills</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg">Transport</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg">Healthcare</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg">House</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg">Savings</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Food</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Bills</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Transport</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Healthcare</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>House</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Savings</button>
           </div>
         </div>
         <br/>
         <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-success" onClick={handleRedirect}>+Add New Transaction</button>
-          </div>
+          <button type="button" class="btn btn-success" onClick={() => handleRedirect('/add_transaction')}>+Add New Transaction</button>
+        </div>
       </div>
 
     </div>

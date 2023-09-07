@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import AddTransaction from './components/AddTransaction';
 import HomePage from './components/HomePage';
+import Transactions from './components/Transactions';
 
 const App = () => {
 
@@ -10,7 +11,8 @@ const App = () => {
 
       <Routes>
         <Route exact path="/" element={<HomePage/>} />
-        <Route path="/add" element={<AddTransaction/>} />
+        <Route path="/add_transaction" element={<AddTransaction/>} />
+        <Route path="/list" element={<Transactions/>} />
       </Routes>
   
     </Router>
