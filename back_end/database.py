@@ -1,7 +1,8 @@
 from pymongo import MongoClient
 import datetime
+from decouple import config
 
-uri = "mongodb+srv://user123:WcCydZeAK2Xy99mC@budgeting-app.nlj2cmb.mongodb.net/?retryWrites=true&w=majority"
+uri = config('MONGO_URI')
 client = MongoClient(uri)
 
 #database to use
