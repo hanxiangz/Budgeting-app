@@ -17,10 +17,24 @@ const Transactions = () => {
 
   return (
     <div>
-        <p>This is the transactions page. See your expenses</p>
-      <p>{data[0].amount}</p>
-      <p>{data[0].date}</p>
-      <p>{data[0].description}</p>
+        <h1> TRANSACTIONS </h1>
+        <h2> --{'>'} FOOD </h2>
+        <div className="line"></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <td>{data[0].amount}</td>
+            <td>{data[0].date}</td>
+            <td>{data[0].description}</td>
+          </tbody>
+    </table>
+      
     </div>
   )
 }

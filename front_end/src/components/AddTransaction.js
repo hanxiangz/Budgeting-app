@@ -8,6 +8,7 @@ function AddTransaction() {
     amount: '',
     category: '',
     description: '',
+    date: '',
   });
 
   const [amountValidationMessage, setAmountValidationMessage] = useState('');
@@ -34,6 +35,7 @@ function AddTransaction() {
   };
 
   const handleSubmit = async (e) => {
+    // prevent page refresh 
     e.preventDefault();
     // if the amount entered is not a number, prevent form submission 
     if (amountValidationMessage) {
@@ -45,13 +47,17 @@ function AddTransaction() {
       return;
     }
 
+    const date = new Date();
+    const options = { year: '2-digit', month: 'short', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-Au', options);
+    console.log(formattedDate)
     try {
       const response = await fetch('/add_transaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, date: formattedDate }),
       });
       if (response.ok) {
         console.log('Form submitted successfully');
@@ -60,6 +66,7 @@ function AddTransaction() {
           amount: '',
           category: '',
           description: '',
+          date: '',
         });
         setCategoryValidationMessage('');
         setSelectedOption('');
