@@ -50,7 +50,6 @@ function AddTransaction() {
     const date = new Date();
     const options = { year: '2-digit', month: 'short', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('en-Au', options);
-    console.log(formattedDate)
     try {
       const response = await fetch('/add_transaction', {
         method: 'POST',

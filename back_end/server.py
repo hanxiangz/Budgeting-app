@@ -15,14 +15,28 @@ def flask_hello():
     return "Wise Wallet"
 
 
-#to retrieve all the spending from the database
-
-@app.route('/list', methods=['GET'])
-def get_all_list_route():
-    expenses = database.get_all_list()
-    for expense in expenses:
+#to retrieve all the spending from a particular category 
+@app.route('/transactions/<category>', methods=['GET'])
+def get_all_in_category(category): 
+    # return a list of the category's expenses
+    if category == 'food':
+        category_expenses = database.get_all_food()
+    elif category == 'bills':
+        category_expenses = database.get_all_bills()
+    elif category == 'transport':
+        category_expenses = database.get_all_transport()
+    elif category == 'healthcare':
+        category_expenses = database.get_all_healthcare()
+    elif category == 'house':
+        category_expenses = database.get_all_house()
+    elif category == 'savings':
+        category_expenses = database.get_all_savings()
+    else:
+        return jsonify([])
+        
+    for expense in category_expenses:
         expense['_id'] = str(expense['_id'])
-    return jsonify(expenses)
+    return jsonify(category_expenses)
 
 
 #to add a expenditure to the database
@@ -33,7 +47,6 @@ def add_spending_route():
     Expects the spending data to be sent as JSON in the request body.
     """
     data = request.get_json()
-    
     result = add_spending(data)
     if "id" in result:
         return jsonify(result), 201

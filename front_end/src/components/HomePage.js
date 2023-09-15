@@ -113,12 +113,12 @@ const HomePage = () => {
         <br/>
         <div class="d-flex justify-content-center">
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Food</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Bills</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Transport</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Healthcare</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>House</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/list')}>Savings</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/transactions/food')}>Food</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/transactions/bills')}>Bills</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/transactions/transport')}>Transport</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/transactions/healthcare')}>Healthcare</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('//transactions/house')}>House</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg" onClick={() => handleRedirect('/transactions/savings')}>Savings</button>
           </div>
         </div>
         <br/>
