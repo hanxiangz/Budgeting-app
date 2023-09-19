@@ -10,12 +10,12 @@ db = client['Budgeting_app']
 
 #Collections
 all_expenses = db['Expenditure_List']
-food = db['Food']
-bills = db["Bills"]
-transport = db['Transport']
-healthcare = db['Healthcare']
-house = db['House']
-savings = db['Savings']
+food = db['food']
+bills = db["bills"]
+transport = db['transport']
+healthcare = db['healthcare']
+house = db['house']
+savings = db['savings']
 
 def get_all_food():
     return list(food.find({}))  
@@ -58,7 +58,16 @@ def add_spending(data):
     else:
         return {"message": "Failed to add data."}
 
-#Remove a single item by its _id from the MongoDB collections(testing)
-def remove_item_by_id(item_id):
-    result = all_expenses.delete_one({"_id": item_id})
-    return result.deleted_count  # returns the number of documents deleted (0 or 1)
+#Remove a single item by its _id from the MongoDB collections
+def remove_item_by_id(category, item_id):
+    # Remove the item from the 'all_expenses' collection
+    result_all = all_expenses.delete_one({"_id": item_id})
+    
+    # Remove the item from the category-specific collection
+    result_category = db[category].delete_one({"_id": item_id})
+    
+    # Check if either operation succeeded and return a count of deleted documents
+    if result_all.deleted_count > 0 or result_category.deleted_count > 0:
+        return result_all.deleted_count + result_category.deleted_count
+    else:
+        return 0  # If neither operation succeeded

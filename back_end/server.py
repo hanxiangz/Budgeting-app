@@ -55,10 +55,10 @@ def add_spending_route():
 
 
  #to remove expenditure from the database
-@app.route('/list/<item_id>', methods=['DELETE'])
-def delete_spending_route(item_id):
+@app.route('/transactions/<category>/<item_id>', methods=['DELETE'])
+def delete_spending_route(category, item_id):
     try:
-        deleted_count = remove_item_by_id(ObjectId(item_id))
+        deleted_count = remove_item_by_id(category, ObjectId(item_id))
         if deleted_count:
             return jsonify({"message": "Data deleted successfully!"}), 200
         else:
@@ -66,14 +66,6 @@ def delete_spending_route(item_id):
     except Exception as e:
         return jsonify({"message": f"Error: {str(e)}"}), 500
 
- #to call and display the different categories in a dropdown menu
-
-@app.route('/categories', methods=['GET'])
-def get_categories():
-    categories = ["Eat_Out", "Utilities", "Groceries", "Departmental", "Miscellaneous"]
-    return jsonify(categories)
-
- 
 
 if __name__ == "__main__":
     app.run(debug=True)

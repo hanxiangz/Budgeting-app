@@ -25,6 +25,32 @@ const Transactions = () => {
       });
   }, [category]);
 
+  const handleDeleteRow = (index) => {
+    const itemIdToDelete = data[index]._id; 
+    // Create a copy of the data array
+    const newData = [...data];
+    // Remove the item at the specified index
+    newData.splice(index, 1);
+    // Update the state with the new data (remove the selected row)
+    setData(newData);
+
+    fetch(`/transactions/${category}/${itemIdToDelete}`, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((response) => {
+        console.log(response.message); // Log the success message from the backend
+      })
+      .catch((error) => {
+        console.error('Error deleting item:', error);
+      });
+  };
+
   return (
     <div className="transaction">
       <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -49,19 +75,24 @@ const Transactions = () => {
             <h2>&rarr; {category.toUpperCase()}</h2>
           </div>
           <table>
-            <thead>
+            <thead className="table-header-cell">
               <tr>
-                <th className="table-header-cell">Amount</th>
-                <th className="table-header-cell">Date</th>
-                <th className="table-header-cell">Description</th>
+                <th style={{ fontWeight: 'normal' }}>Amount</th>
+                <th style={{ fontWeight: 'normal' }}>Date</th>
+                <th style={{ fontWeight: 'normal' }}>Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="table-data">${data[0].amount}</td>
-                <td className="table-data">{data[0].date}</td>
-                <td className="table-data">{data[0].description}</td>
-              </tr>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td className="table-data">${item.amount}</td>
+                  <td className="table-data">{item.date}</td>
+                  <td className="table-data">{item.description}</td>
+                  <td>
+                    <button onClick={() => handleDeleteRow(index)}>❌</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

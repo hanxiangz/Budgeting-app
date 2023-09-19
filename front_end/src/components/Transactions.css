@@ -24,19 +24,22 @@ body,
   background-color: white;
 }
 
+table {
+  width: 100%;
+}
+
 .table-header-cell {
   border-top: 1px solid #000; /* Add your desired line style here */
   border-bottom: 1px solid #000; /* Add your desired line style here */
   padding: 5px; /* Adjust as needed */
-  font-weight: normal; /* Adjust as needed */
   text-align: left;
   width: 10%;
 }
 
 .table-data {
-    border-bottom: 1px solid #7b7979; /* Add your desired line style here */
-    padding: 15px; /* Adjust as needed */
-    text-align: left; /* Adjust as needed */
-    font-weight: normal; /* Adjust as needed */
-    color: #7b7979; /* Set the text color to grey */
+  border-bottom: 1px solid #7b7979; /* Add your desired line style here */
+  padding: 15px; /* Adjust as needed */
+  text-align: left; /* Adjust as needed */
+  font-weight: normal; /* Adjust as needed */
+  color: #7b7979; /* Set the text color to grey */
 }
