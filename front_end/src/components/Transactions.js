@@ -5,6 +5,8 @@ import "./Transactions.css";
 const Transactions = () => {
   const { category } = useParams();
   const [data, setData] = useState([{}]);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [itemToDeleteIndex, setItemToDeleteIndex] = useState(null);
 
   useEffect(() => {
     fetch(`/transactions/${category}`)
@@ -15,7 +17,7 @@ const Transactions = () => {
         return res.json();
       })
       .then((data) => {
-        // Handle successful response; data is the returned json data...not the same as useState data
+        // Handle successful response; data is the returned JSON data...not the same as useState data
         setData(data);
         console.log("The data is fetched", data[0].amount);
       })
@@ -26,29 +28,42 @@ const Transactions = () => {
   }, [category]);
 
   const handleDeleteRow = (index) => {
-    const itemIdToDelete = data[index]._id; 
-    // Create a copy of the data array
-    const newData = [...data];
-    // Remove the item at the specified index
-    newData.splice(index, 1);
-    // Update the state with the new data (remove the selected row)
-    setData(newData);
+    setItemToDeleteIndex(index);
+    setShowConfirmationModal(true);
+  };
 
-    fetch(`/transactions/${category}/${itemIdToDelete}`, {
-      method: 'DELETE',
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
+  const confirmDelete = () => {
+    if (itemToDeleteIndex !== null) {
+      const itemIdToDelete = data[itemToDeleteIndex]._id;
+      // Create a copy of the data array
+      const newData = [...data];
+      // Remove the item at the specified index
+      newData.splice(itemToDeleteIndex, 1);
+      // Update the state with the new data (remove the selected row)
+      setData(newData);
+
+      fetch(`/transactions/${category}/${itemIdToDelete}`, {
+        method: "DELETE",
       })
-      .then((response) => {
-        console.log(response.message); // Log the success message from the backend
-      })
-      .catch((error) => {
-        console.error('Error deleting item:', error);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((response) => {
+          console.log(response.message); // Log the success message from the backend
+        })
+        .catch((error) => {
+          console.error("Error deleting item:", error);
+        });
+    }
+    setShowConfirmationModal(false); // Hide the confirmation modal
+  };
+
+  const cancelDelete = () => {
+    setItemToDeleteIndex(null);
+    setShowConfirmationModal(false); // Hide the confirmation modal
   };
 
   return (
@@ -77,9 +92,9 @@ const Transactions = () => {
           <table>
             <thead className="table-header-cell">
               <tr>
-                <th style={{ fontWeight: 'normal' }}>Amount</th>
-                <th style={{ fontWeight: 'normal' }}>Date</th>
-                <th style={{ fontWeight: 'normal' }}>Description</th>
+                <th style={{ fontWeight: "normal" }}>Amount</th>
+                <th style={{ fontWeight: "normal" }}>Date</th>
+                <th style={{ fontWeight: "normal" }}>Description</th>
               </tr>
             </thead>
             <tbody>
@@ -95,6 +110,14 @@ const Transactions = () => {
               ))}
             </tbody>
           </table>
+
+          {showConfirmationModal && (
+            <div className="confirmation-modal">
+              <p>Are you sure you want to delete this row?</p>
+              <button onClick={confirmDelete}>Confirm</button>
+              <button onClick={cancelDelete}>Cancel</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
