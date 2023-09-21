@@ -112,10 +112,12 @@ const Transactions = () => {
           </table>
 
           {showConfirmationModal && (
-            <div className="confirmation-modal">
-              <p>Are you sure you want to delete this row?</p>
-              <button onClick={confirmDelete}>Confirm</button>
-              <button onClick={cancelDelete}>Cancel</button>
+            <div className="modal-overlay">
+              <div className="confirmation-modal">
+                <p>Are you sure you want to delete this row?</p>
+                <button onClick={confirmDelete}>Confirm</button>
+                <button onClick={cancelDelete}>Cancel</button>
+              </div>
             </div>
           )}
         </div>

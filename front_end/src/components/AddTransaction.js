@@ -1,83 +1,82 @@
-import React, { useState } from 'react';
-import './AddTransaction.css';
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./AddTransaction.css";
 
 function AddTransaction() {
-
   const [formData, setFormData] = useState({
-    amount: '',
-    category: '',
-    description: '',
-    date: '',
+    amount: "",
+    category: "",
+    description: "",
+    date: "",
   });
 
-  const [amountValidationMessage, setAmountValidationMessage] = useState('');
-  const [categoryValidationMessage, setCategoryValidationMessage] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
+  const [amountValidationMessage, setAmountValidationMessage] = useState("");
+  const [categoryValidationMessage, setCategoryValidationMessage] =
+    useState("");
+  const [selectedOption, setSelectedOption] = useState("");
 
   const handleSelectChange = (e) => {
     const selectedCategory = e.target.value;
     setSelectedOption(selectedCategory);
     setFormData({ ...formData, category: selectedCategory });
-  };  
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     // Check if the input value is a valid number using a regular expression
-    if (name === 'amount') {
+    if (name === "amount") {
       if (/^\d+(\.\d{1,2})?$/.test(value) && parseFloat(value) >= 0) {
-        setAmountValidationMessage('');
+        setAmountValidationMessage("");
       } else {
-        setAmountValidationMessage('Please enter a valid number');
+        setAmountValidationMessage("Please enter a valid number");
       }
     }
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
-    // prevent page refresh 
+    // prevent page refresh
     e.preventDefault();
-    // if the amount entered is not a number, prevent form submission 
+    // if the amount entered is not a number, prevent form submission
     if (amountValidationMessage) {
       return;
     }
     // Check if the "category" input is empty
     if (!formData.category.trim()) {
-      setCategoryValidationMessage('Please select a category');
+      setCategoryValidationMessage("Please select a category");
       return;
     }
 
     const date = new Date();
-    const options = { year: '2-digit', month: 'short', day: 'numeric' };
-    const formattedDate = date.toLocaleDateString('en-Au', options);
+    const options = { year: "2-digit", month: "short", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-Au", options);
     try {
-      const response = await fetch('/add_transaction', {
-        method: 'POST',
+      const response = await fetch("/add_transaction", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...formData, date: formattedDate }),
       });
       if (response.ok) {
-        console.log('Form submitted successfully');
+        console.log("Form submitted successfully");
         // After processing, reset the form state
         setFormData({
-          amount: '',
-          category: '',
-          description: '',
-          date: '',
+          amount: "",
+          category: "",
+          description: "",
+          date: "",
         });
-        setCategoryValidationMessage('');
-        setSelectedOption('');
-        alert("You have successfully submitted a transaction")
+        setCategoryValidationMessage("");
+        setSelectedOption("");
+        alert("You have successfully submitted a transaction");
       } else {
-        console.error('Form submission failed');
+        console.error("Form submission failed");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-
 
   return (
     <div>
@@ -85,24 +84,38 @@ function AddTransaction() {
       <div className="line"></div>
       <div className="container-form">
         <form className="my-form" onSubmit={handleSubmit}>
-          <div className="form-group"> 
-            <label style={{fontSize: 25}}>
+          <div className="form-group">
+            <label style={{ fontSize: 25 }}>
               Amount($):
-              <input style={{ height: '30px', width: '400px', marginLeft: 15, fontSize: 18}} type="text"
-              name="amount" placeholder="Enter amount here" value={formData.amount} onChange={handleChange} />
+              <input
+                style={{
+                  height: "30px",
+                  width: "400px",
+                  marginLeft: 15,
+                  fontSize: 18,
+                }}
+                type="text"
+                name="amount"
+                placeholder="Enter amount here"
+                value={formData.amount}
+                onChange={handleChange}
+              />
               {amountValidationMessage && (
-                <p style={{ color: 'red' }}>{amountValidationMessage}</p>
+                <p style={{ color: "red" }}>{amountValidationMessage}</p>
               )}
             </label>
           </div>
 
-          <div className="form-group"> 
-            <label style={{fontSize: 25}} htmlFor="dropdown">
+          <div className="form-group">
+            <label style={{ fontSize: 25 }} htmlFor="dropdown">
               Category:
-  
             </label>
-            <select id="dropdown" value={selectedOption} onChange={handleSelectChange} 
-              style={{ height: '30px', width: '400px', marginLeft: 15 }}>
+            <select
+              id="dropdown"
+              value={selectedOption}
+              onChange={handleSelectChange}
+              style={{ height: "30px", width: "400px", marginLeft: 15 }}
+            >
               <option value="">-- Select an option --</option>
               <option value="food">Food</option>
               <option value="bills">Bills</option>
@@ -112,21 +125,37 @@ function AddTransaction() {
               <option value="savings">Savings</option>
             </select>
             {categoryValidationMessage && (
-                <p style={{ color: 'red' }}>{categoryValidationMessage}</p>
+              <p style={{ color: "red" }}>{categoryValidationMessage}</p>
             )}
           </div>
 
-          <div className="form-group"> 
-            <label style={{fontSize: 25}}>
+          <div className="form-group">
+            <label style={{ fontSize: 25 }}>
               Description:
-              <input style={{ height: '150px', width: '400px', marginLeft: 15, fontSize: 18}} type="text" 
-              name="description" placeholder="Enter description here" value={formData.description} onChange={handleChange} />
+              <input
+                style={{
+                  height: "150px",
+                  width: "400px",
+                  marginLeft: 15,
+                  fontSize: 18,
+                }}
+                type="text"
+                name="description"
+                placeholder="Enter description here"
+                value={formData.description}
+                onChange={handleChange}
+              />
             </label>
           </div>
-          <button class="submit-button" type="submit">ADD</button>
+          <Link to="/">
+            {/* Create a Link to the home page */}
+            <button className="back-button">HOME</button>
+          </Link>
+          <button class="submit-button" type="submit">
+            ADD
+          </button>
         </form>
       </div>
-      
     </div>
   );
 }

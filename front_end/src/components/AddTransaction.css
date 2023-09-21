@@ -34,9 +34,29 @@ input {
 
 .submit-button {
   background-color: #bd0d0d; 
+  margin-top: 10px;
   color: white; 
   width: 100px;
   height: 40px;
   font-size: 25px;
   line-height: 0px; /* Adjust line height to vertically center text */
+  cursor: pointer;
+}
+
+.back-button {
+  margin: 10px;
+  margin-right: 220px;
+  padding: 1px 2px;
+  background-color: #bd0d0d; /* Blue color */
+  color: #ffffff; /* White text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  text-decoration: none;
+}
+
+.submit-button:hover,
+.back-button:hover {
+  background-color: #c8f17b; /* Darker blue color on hover */
 }
