@@ -71,3 +71,4 @@ def remove_item_by_id(category, item_id):
         return result_all.deleted_count + result_category.deleted_count
     else:
         return 0  # If neither operation succeeded
+    

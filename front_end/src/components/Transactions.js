@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./Transactions.css";
+import ConfirmationModal from "./ConfirmationModal";
+import EditModal from "./EditModal";
 
 const Transactions = () => {
   const { category } = useParams();
   const [data, setData] = useState([{}]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [itemToDeleteIndex, setItemToDeleteIndex] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState(null);
+  const [editedItem, setEditedItem] = useState({}); // State to track edited data
 
   useEffect(() => {
     fetch(`/transactions/${category}`)
@@ -19,7 +24,6 @@ const Transactions = () => {
       .then((data) => {
         // Handle successful response; data is the returned JSON data...not the same as useState data
         setData(data);
-        console.log("The data is fetched", data[0].amount);
       })
       .catch((error) => {
         // Handle errors
@@ -30,6 +34,12 @@ const Transactions = () => {
   const handleDeleteRow = (index) => {
     setItemToDeleteIndex(index);
     setShowConfirmationModal(true);
+  };
+
+  const handleEditRow = (item, index) => {
+    setItemToEdit(item);
+    setEditedItem(item); // Initialize the edited data with the current data
+    setShowEditModal(true);
   };
 
   const confirmDelete = () => {
@@ -66,6 +76,53 @@ const Transactions = () => {
     setShowConfirmationModal(false); // Hide the confirmation modal
   };
 
+  const confirmEdit = async() => {
+    // Update the data with the edited data
+    const updatedData = [...data];
+    // check to see if the index user wants to edit is in the database
+    const indexToEdit = data.findIndex((item) => item._id === itemToEdit._id);
+    if (indexToEdit !== -1) {
+      updatedData[indexToEdit] = editedItem;
+      setData(updatedData);
+
+      // Implement the logic to send the edited data to the server
+      const editedItemDate = new Date(editedItem.date);
+      const options = { year: "2-digit", month: "short", day: "numeric" };
+      const formattedDate = editedItemDate.toLocaleDateString(
+        "en-Au",
+        options
+      );
+      
+      try {
+        const response = await fetch(
+          `/transactions/${category}/${itemToEdit._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({...editedItem, date:formattedDate}),
+          }
+        );
+        if (response.ok) {
+          console.log("edit submitted successfully");
+          // After processing, reset the edit state
+          setEditedItem({});
+          window.location.reload();
+        } else {
+          console.error("Error submitting edit:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+      setShowEditModal(false);
+    }
+  };
+
+  const cancelEdit = () => {
+    setShowEditModal(false);
+  };
+
   return (
     <div className="transaction">
       <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -92,9 +149,13 @@ const Transactions = () => {
           <table>
             <thead className="table-header-cell">
               <tr>
-                <th style={{ fontWeight: "normal" }}>Amount</th>
-                <th style={{ fontWeight: "normal" }}>Date</th>
-                <th style={{ fontWeight: "normal" }}>Description</th>
+                <th style={{ fontWeight: "normal", width: 100 }}>Amount</th>
+                <th style={{ fontWeight: "normal", width: 150 }}>Date</th>
+                <th style={{ fontWeight: "normal", width: 300 }}>
+                  Description
+                </th>
+                <th style={{ width: 10 }}></th>
+                <th style={{ width: 10 }}></th>
               </tr>
             </thead>
             <tbody>
@@ -104,6 +165,11 @@ const Transactions = () => {
                   <td className="table-data">{item.date}</td>
                   <td className="table-data">{item.description}</td>
                   <td>
+                    <button onClick={() => handleEditRow(item, index)}>
+                      Edit
+                    </button>
+                  </td>
+                  <td>
                     <button onClick={() => handleDeleteRow(index)}>❌</button>
                   </td>
                 </tr>
@@ -111,15 +177,19 @@ const Transactions = () => {
             </tbody>
           </table>
 
-          {showConfirmationModal && (
-            <div className="modal-overlay">
-              <div className="confirmation-modal">
-                <p>Are you sure you want to delete this row?</p>
-                <button onClick={confirmDelete}>Confirm</button>
-                <button onClick={cancelDelete}>Cancel</button>
-              </div>
-            </div>
-          )}
+          <ConfirmationModal
+            isOpen={showConfirmationModal}
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
+
+          <EditModal
+            isOpen={showEditModal}
+            onConfirm={confirmEdit}
+            onCancel={cancelEdit}
+            editedItem={editedItem}
+            onEditItemChange={setEditedItem}
+          />
         </div>
       </div>
     </div>

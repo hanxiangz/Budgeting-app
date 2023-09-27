@@ -67,5 +67,30 @@ def delete_spending_route(category, item_id):
         return jsonify({"message": f"Error: {str(e)}"}), 500
 
 
+#to update a spending 
+@app.route('/transactions/<category>/<item_id>', methods=['PUT'])
+def ammend_spending_route(category, item_id):
+    
+    try:
+        # Get the updated data from the request body as JSON
+        editedItem = request.json
+        # Remove the _id field from the editedItem to avoid modifying it
+        if '_id' in editedItem:
+            del editedItem['_id']
+        # Update the item in the MongoDB collection
+        result_all = database.all_expenses.update_one({'_id': ObjectId(item_id)}, {'$set': editedItem}, upsert=True)
+        result_category = database.db[category].update_one({'_id': ObjectId(item_id)}, {'$set': editedItem})
+
+        if result_all.modified_count == 1 or result_category.modified_count == 1:
+            return jsonify({"message": "Transaction updated successfully"})
+        else:
+            return jsonify({"message": "Transaction not found or not updated"}), 404
+
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in ammend_spending_route: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
