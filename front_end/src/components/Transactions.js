@@ -81,7 +81,7 @@ const Transactions = () => {
           console.error("Error deleting item:", error);
         });
     }
-    setItemToDeleteIndex(null); 
+    setItemToDeleteIndex(null);
     setShowConfirmationModal(false); // Hide the confirmation modal
   };
 
@@ -133,7 +133,7 @@ const Transactions = () => {
 
   const cancelEdit = () => {
     setItemToEdit(null);
-    setEditedItem({}); 
+    setEditedItem({});
     setShowEditModal(false);
   };
 
@@ -163,11 +163,20 @@ const Transactions = () => {
               <h1>TRANSACTIONS</h1>
               <h2>&rarr; {category.toUpperCase()}</h2>
             </div>
+
             <table>
               <thead className="table-header-cell">
-                <tr>
-                  <th style={{ fontWeight: "normal", width: 100 }}>Amount</th>
-                  <th style={{ fontWeight: "normal", width: 150 }}>Date</th>
+                <tr style={{ borderBottom: 1 }}>
+                  <th style={{ fontWeight: "normal", width: 70 }}>Amount</th>
+                  <th
+                    style={{
+                      fontWeight: "normal",
+                      width: 120,
+                      textAlign: "center",
+                    }}
+                  >
+                    Date
+                  </th>
                   <th style={{ fontWeight: "normal", width: 300 }}>
                     Description
                   </th>
@@ -179,8 +188,20 @@ const Transactions = () => {
                 {data.map((item, index) => (
                   <tr key={index}>
                     <td className="table-data">${item.amount}</td>
-                    <td className="table-data">{item.date}</td>
-                    <td className="table-data">{item.description}</td>
+                    <td className="table-data" style={{ textAlign: "center" }}>
+                      {item.date}
+                    </td>
+                    <td
+                      className="table-data"
+                      style={{
+                        maxWidth: 300,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {item.description}
+                    </td>
                     <td>
                       <button onClick={() => handleEditRow(item, index)}>
                         Edit

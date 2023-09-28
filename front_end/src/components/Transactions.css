@@ -26,6 +26,7 @@ body,
 
 table {
   width: 100%;
+  border-collapse: collapse; /* This property ensures that borders don't overlap */
 }
 
 .table-header-cell {
@@ -36,9 +37,18 @@ table {
 }
 
 .table-data {
-  border-bottom: 1px solid #7b7979; /* Add your desired line style here */
   padding: 15px; /* Adjust as needed */
   text-align: left; /* Adjust as needed */
   font-weight: normal; /* Adjust as needed */
   color: #7b7979; /* Set the text color to grey */
+}
+
+/* Style the line beneath each row entry */
+tr {
+  border-bottom: 1px solid #cecaca; /* Add a bottom border to table rows */
+}
+
+/* Style the last row to remove the bottom border */
+tr:last-child {
+  border-bottom: none; /* Remove the bottom border for the last row */
 }
