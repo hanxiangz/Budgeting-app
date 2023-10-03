@@ -90,7 +90,7 @@ const HomePage = () => {
           <a class="navbar-brand" href="/">
             WiseWallet
           </a>
-          <a class="navbar-brand justify-content-end" href="/">
+          <a class="navbar-brand justify-content-end" href="/profile">
             <img
               src="https://png.pngtree.com/png-vector/20190704/ourmid/pngtree-businessman-user-avatar-free-vector-png-image_1538405.jpg"
               alt="Logo"

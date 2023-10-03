@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request
+from flask import Flask, jsonify,request
 from database import add_spending, remove_item_by_id
 import database
 from flask_cors import CORS
@@ -6,8 +6,7 @@ from bson.objectid import ObjectId
 
 
 app = Flask(__name__)
-
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "methods": ["GET", "POST", "DELETE"]}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "methods": ["GET", "POST", "PUT", "DELETE"]}})
 
 
 @app.route("/")
